@@ -1,0 +1,85 @@
+{
+  "created_at": "Tue Jun 18 20:25:58 +0000 2013",
+  "id": 347087814833344512,
+  "id_str": "347087814833344512",
+  "text": "Doc Rivers will be in Boston on Wednesday and plans to sit down with Danny Ainge, league source says.",
+  "source": "<a href=\"http://twitter.com/download/iphone\" rel=\"nofollow\">Twitter for iPhone</a>",
+  "truncated": false,
+  "in_reply_to_status_id": null,
+  "in_reply_to_status_id_str": null,
+  "in_reply_to_user_id": null,
+  "in_reply_to_user_id_str": null,
+  "in_reply_to_screen_name": null,
+  "user": {
+    "id": 50323173,
+    "id_str": "50323173",
+    "name": "Adrian Wojnarowski",
+    "screen_name": "WojYahooNBA",
+    "location": "Butler Gymnasium",
+    "description": "NBA columnist for Yahoo! Sports/NBA Insider for NBC Sports Network.",
+    "url": "http://t.co/XPxneapcLW",
+    "entities": {
+      "url": {
+        "urls": [
+          {
+            "url": "http://t.co/XPxneapcLW",
+            "expanded_url": "http://sports.yahoo.com/author/adrian-wojnarowski/",
+            "display_url": "sports.yahoo.com/author/adrian-…",
+            "indices": [
+              0,
+              22
+            ]
+          }
+        ]
+      },
+      "description": {
+        "urls": []
+      }
+    },
+    "protected": false,
+    "followers_count": 406019,
+    "friends_count": 227,
+    "listed_count": 9968,
+    "created_at": "Wed Jun 24 14:43:40 +0000 2009",
+    "favourites_count": 47,
+    "utc_offset": -18000,
+    "time_zone": "Eastern Time (US & Canada)",
+    "geo_enabled": false,
+    "verified": true,
+    "statuses_count": 6005,
+    "lang": "en",
+    "contributors_enabled": false,
+    "is_translator": false,
+    "profile_background_color": "9AE4E8",
+    "profile_background_image_url": "http://a0.twimg.com/profile_background_images/667656964/0957d0281be9beab05a71bf88de03c05.png",
+    "profile_background_image_url_https": "https://si0.twimg.com/profile_background_images/667656964/0957d0281be9beab05a71bf88de03c05.png",
+    "profile_background_tile": true,
+    "profile_image_url": "http://a0.twimg.com/profile_images/2062589385/butlergym_normal.jpg",
+    "profile_image_url_https": "https://si0.twimg.com/profile_images/2062589385/butlergym_normal.jpg",
+    "profile_link_color": "0084B4",
+    "profile_sidebar_border_color": "FFFFFF",
+    "profile_sidebar_fill_color": "DDFFCC",
+    "profile_text_color": "333333",
+    "profile_use_background_image": true,
+    "default_profile": false,
+    "default_profile_image": false,
+    "following": false,
+    "follow_request_sent": false,
+    "notifications": false
+  },
+  "geo": null,
+  "coordinates": null,
+  "place": null,
+  "contributors": null,
+  "retweet_count": 100,
+  "favorite_count": 11,
+  "entities": {
+    "hashtags": [],
+    "symbols": [],
+    "urls": [],
+    "user_mentions": []
+  },
+  "favorited": false,
+  "retweeted": false,
+  "lang": "en"
+}
