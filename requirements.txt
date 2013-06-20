@@ -1,0 +1,4 @@
+blinker==1.2
+oauthlib==0.4.2
+requests==1.2.3
+requests-oauthlib==0.3.2
