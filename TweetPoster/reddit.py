@@ -13,7 +13,7 @@ class Redditor(User):
         super(Redditor, self).__init__(*a, **kw)
         pre_request.connect(self.ratelimit, sender=self)
 
-    def login(self, password):
+    def login(self, username, password):
         """
         Logs a user in, stores modhash in Redditor.modhash
 
@@ -22,7 +22,7 @@ class Redditor(User):
         params = {
             'passwd': password,
             'rem': False,
-            'user': self.username,
+            'user': username,
             'api_type': 'json',
         }
 

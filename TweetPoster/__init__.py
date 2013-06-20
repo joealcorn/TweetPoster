@@ -13,8 +13,7 @@ class User(object):
         'User-Agent': 'https://github.com/buttscicles/TweetPoster'
     }
 
-    def __init__(self, username):
-        self.username = username
+    def __init__(self):
         self.session = requests.session()
 
     def get(self, url, **kw):
