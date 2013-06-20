@@ -15,3 +15,15 @@ class Twitter(User):
             config['twitter']['access_secret'],
             signature_type='auth_header'
         )
+
+    def get_tweet(self, tweet_id):
+        url = 'https://api.twitter.com/1.1/statuses/show.json'
+        params = {
+            'id': tweet_id,
+            'include_entities': 1,
+        }
+
+        r = self.get(url, params=params)
+        assert r.status_code == 200
+
+        return r.json()
