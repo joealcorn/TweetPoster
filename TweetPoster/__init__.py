@@ -1,6 +1,11 @@
+import json
+
 import requests
 
 from TweetPoster.signals import pre_request
+
+
+config = json.loads(open('config.json').read())
 
 
 class User(object):
