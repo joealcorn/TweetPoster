@@ -18,10 +18,7 @@ class Redditor(User):
         Logs a user in, stores modhash in Redditor.modhash
 
         """
-
-        login_url = 'https://www.reddit.com/api/login'
-        about_url = 'http://www.reddit.com/api/me.json'
-
+        login_url = 'https://ssl.reddit.com/api/login'
         params = {
             'passwd': password,
             'rem': False,
@@ -29,10 +26,13 @@ class Redditor(User):
             'api_type': 'json',
         }
 
-        self.post(login_url, params)
-        r = self.get(about_url)
-        self.modhash = r.json()['data']['modhash']
+        r = self.post(login_url, params)
+        if 'data' not in r.json()['json']:
+            raise Exception('login failed')
+
+        self.modhash = r.json()['json']['data']['modhash']
         self.authenticated = True
+        return self
 
     def comment(self, thing_id, comment):
         """
@@ -51,10 +51,13 @@ class Redditor(User):
         return self.post(url, params)
 
     def ratelimit(self, sender):
-        print 'signal received'
-        now = time.time()
-        if self.last_request is None:
-            self.last_request = now
-        else:
-            tts = min(2, now, self.last_request)
-            time.sleep(tts)
+        """
+        Helps us abide by reddit's API usage limitations.
+        https://github.com/reddit/reddit/wiki/API#rules
+        """
+        if self.last_request is not None:
+            diff = time.time() - self.last_request
+            if diff < 2:
+                time.sleep(2 - diff)
+
+        self.last_request = time.time()

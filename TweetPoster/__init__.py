@@ -49,6 +49,6 @@ class User(object):
         pre_request.send(self)
 
         if method == 'POST':
-            return self.session.post(url, data=kw.get('data', {}), **kw)
+            return self.session.post(url, **kw)
         elif method == 'GET':
-            return self.session.get(url, params=kw.get('params', {}), **kw)
+            return self.session.get(url, **kw)
