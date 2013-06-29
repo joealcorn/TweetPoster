@@ -9,9 +9,11 @@ class Redditor(User):
     authenticated = False
     last_request = None
 
-    def __init__(self, *a, **kw):
+    def __init__(self, bypass_ratelimit=False, *a, **kw):
         super(Redditor, self).__init__(*a, **kw)
-        pre_request.connect(self.ratelimit, sender=self)
+
+        if not bypass_ratelimit:
+            pre_request.connect(self.ratelimit, sender=self)
 
     def login(self, username, password):
         """
