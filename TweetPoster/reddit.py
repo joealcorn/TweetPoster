@@ -13,7 +13,7 @@ class Redditor(User):
         super(Redditor, self).__init__(*a, **kw)
 
         if not bypass_ratelimit:
-            pre_request.connect(self.ratelimit, sender=self)
+            pre_request.connect(self._ratelimit, sender=self)
 
     def login(self, username, password):
         """
@@ -52,7 +52,7 @@ class Redditor(User):
 
         return self.post(url, params)
 
-    def ratelimit(self, sender):
+    def _ratelimit(self, sender):
         """
         Helps us abide by reddit's API usage limitations.
         https://github.com/reddit/reddit/wiki/API#rules
