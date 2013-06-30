@@ -46,6 +46,8 @@ class User(object):
             # Merge self.headers with headers passed in
             # The passed in headers take preference
             kw['headers'] = dict(self.headers.items() + kw['headers'].items())
+        else:
+            kw['headers'] = self.headers
 
         # Send a pre-request signal.
         # This allows us to abide by different

@@ -38,6 +38,13 @@ def mock_comment():
     )
 
 
+def mock_index():
+    httpretty.register_uri(
+        httpretty.GET,
+        'http://www.reddit.com'
+    )
+
+
 @httpretty.activate
 def test_ratelimit():
     url = 'http://www.reddit.com/'
@@ -78,3 +85,12 @@ def test_comment():
     thing = c.json()['json']['data']['things'][0]
     assert comment == thing['data']['contentText']
     assert thing_id == thing['data']['parent']
+
+
+@httpretty.activate
+def test_useragent():
+    mock_index()
+    r = Redditor(bypass_ratelimit=True)
+    r.get('http://www.reddit.com')
+    h = httpretty.last_request().headers
+    assert r.headers['User-Agent'] == h['User-Agent']
