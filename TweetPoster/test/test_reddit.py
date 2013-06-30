@@ -47,8 +47,8 @@ def mock_index():
 
 @httpretty.activate
 def test_ratelimit():
+    mock_index()
     url = 'http://www.reddit.com/'
-    httpretty.register_uri(httpretty.GET, url)
     r = Redditor()
     start = time.time()
     r.get(url)
