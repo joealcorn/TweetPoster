@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 
 from requests_oauthlib import OAuth1
@@ -6,6 +7,10 @@ from TweetPoster import User, config
 
 
 class Twitter(User):
+
+    tweet_re = re.compile(
+        r'https?://(?:www\.|mobile\.)?twitter.com/.+/status(?:es)?/([0-9]{18})'
+    )
 
     def __init__(self, *a, **kw):
         super(Twitter, self).__init__(*a, **kw)

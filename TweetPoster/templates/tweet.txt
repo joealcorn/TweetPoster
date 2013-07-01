@@ -1,0 +1,4 @@
+[**@{user.name}**]({user.link}):
+>[{datetime}]({link})
+
+>{text}

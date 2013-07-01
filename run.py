@@ -2,8 +2,13 @@ import os
 import json
 import sys
 
+import TweetPoster
+
 default_conf = {
     'database': 'tp.db',
+    'sentry': {
+        'dsn': ''
+    },
     'reddit': {
         'username': '',
         'password': '',
@@ -34,3 +39,6 @@ if __name__ == '__main__':
 
         default_conf.update(config)
         write_conf(default_conf)
+
+    else:
+        TweetPoster.run()
