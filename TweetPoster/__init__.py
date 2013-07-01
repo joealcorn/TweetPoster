@@ -19,8 +19,12 @@ class Database(object):
     def cursor(self):
         return self.conn.cursor()
 
-    def init(self):
-        self.cursor().execute(
+    def init(self, clean=False):
+        cur = self.cursor()
+        if clean:
+            cur.execute('DROP TABLE IF EXISTS posts')
+
+        cur.execute(
             'CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY ASC, thing_id TEXT UNIQUE)'
         )
         self.conn.commit()

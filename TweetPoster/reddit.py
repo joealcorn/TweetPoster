@@ -52,6 +52,17 @@ class Redditor(User):
 
         return self.post(url, params)
 
+    def get_new_posts(self, db):
+        """
+        Returns a list of posts that haven't already
+        been processed
+        """
+        url = 'http://www.reddit.com/domain/twitter.com/new.json'
+        r = self.get(url, params=dict(limit=100))
+        all_posts = r.json()['data']['children']
+        posts = [p for p in all_posts if not db.has_processed(p['data']['name'])]
+        return posts
+
     def _ratelimit(self, sender):
         """
         Helps us abide by reddit's API usage limitations.

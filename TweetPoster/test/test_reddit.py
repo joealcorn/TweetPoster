@@ -3,12 +3,17 @@ from os import path
 
 import httpretty
 
+from TweetPoster import Database, config
 from TweetPoster.reddit import Redditor
 
 json_dir = path.dirname(path.realpath(__file__)) + '/json/'
+config.update({
+    'database': ':memory:'
+})
 
 login_url = 'https://ssl.reddit.com/api/login'
 comment_url = 'http://www.reddit.com/api/comment'
+twitter_posts_url = 'http://www.reddit.com/domain/twitter.com/new.json'
 
 
 def mock_login():
@@ -42,6 +47,19 @@ def mock_index():
     httpretty.register_uri(
         httpretty.GET,
         'http://www.reddit.com'
+    )
+
+
+def mock_posts():
+    f = open(json_dir + 'reddit_twitter_posts.json')
+    body = f.read()
+    f.close()
+
+    httpretty.register_uri(
+        httpretty.GET,
+        twitter_posts_url,
+        body=body,
+        content_type='application/json'
     )
 
 
@@ -94,3 +112,22 @@ def test_useragent():
     r.get('http://www.reddit.com')
     h = httpretty.last_request().headers
     assert r.headers['User-Agent'] == h['User-Agent']
+
+
+@httpretty.activate
+def test_get_new():
+    mock_posts()
+    db = Database()
+    db.init(clean=True)
+    r = Redditor(bypass_ratelimit=True)
+    all_posts = r.get_new_posts(db)
+    assert len(all_posts) == 15
+
+    # Mark some as processed
+    for i, p in enumerate(all_posts):
+        if i % 5 == 0:
+            db.mark_as_processed(p['data']['name'])
+
+    # Now check if only returns new ones
+    posts = r.get_new_posts(db)
+    assert len(posts) == 12
