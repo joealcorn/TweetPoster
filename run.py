@@ -3,6 +3,7 @@ import json
 import sys
 
 default_conf = {
+    'database': 'tp.db',
     'reddit': {
         'username': '',
         'password': '',

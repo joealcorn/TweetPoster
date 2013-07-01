@@ -1,4 +1,5 @@
 import json
+import sqlite3
 
 import requests
 
@@ -6,6 +7,33 @@ from TweetPoster.signals import pre_request
 
 
 config = json.loads(open('config.json').read())
+
+
+class Database(object):
+    @property
+    def conn(self):
+        if not hasattr(self, '_connection'):
+            self._connection = sqlite3.connect(config['database'])
+        return self._connection
+
+    def cursor(self):
+        return self.conn.cursor()
+
+    def init(self):
+        self.cursor().execute(
+            'CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY ASC, thing_id TEXT UNIQUE)'
+        )
+        self.conn.commit()
+
+    def has_processed(self, thing_id):
+        c = self.cursor()
+        c.execute('SELECT thing_id FROM posts WHERE thing_id = ?', (thing_id,))
+        return c.fetchone() is not None
+
+    def mark_as_processed(self, thing_id):
+        c = self.cursor()
+        c.execute('INSERT INTO posts (thing_id) VALUES (?)', (thing_id,))
+        self.conn.commit()
 
 
 class User(object):
