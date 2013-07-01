@@ -126,7 +126,7 @@ def test_get_new():
     # Mark some as processed
     for i, p in enumerate(all_posts):
         if i % 5 == 0:
-            db.mark_as_processed(p['data']['name'])
+            p.mark_as_processed(db)
 
     # Now check if only returns new ones
     posts = r.get_new_posts(db)

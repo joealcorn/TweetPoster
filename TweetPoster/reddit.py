@@ -1,7 +1,9 @@
 import time
 
-from TweetPoster import User
+from TweetPoster import User, Database
 from TweetPoster.signals import pre_request
+
+db = Database()
 
 
 class Redditor(User):
@@ -52,7 +54,7 @@ class Redditor(User):
 
         return self.post(url, params)
 
-    def get_new_posts(self, db):
+    def get_new_posts(self, db=db):
         """
         Returns a list of posts that haven't already
         been processed
@@ -60,7 +62,10 @@ class Redditor(User):
         url = 'http://www.reddit.com/domain/twitter.com/new.json'
         r = self.get(url, params=dict(limit=100))
         all_posts = r.json()['data']['children']
-        posts = [p for p in all_posts if not db.has_processed(p['data']['name'])]
+        posts = [
+            Submission(p) for p in all_posts
+            if not db.has_processed(p['data']['name'])
+        ]
         return posts
 
     def _ratelimit(self, sender):
@@ -74,3 +79,14 @@ class Redditor(User):
                 time.sleep(2 - diff)
 
         self.last_request = time.time()
+
+
+class Submission(object):
+    def __init__(self, json):
+        self.title = json['data']['title']
+        self.url = json['data']['url']
+        self.id = json['data']['id']
+        self.fullname = json['data']['name']
+
+    def mark_as_processed(self, db=db):
+        db.mark_as_processed(self.fullname)
