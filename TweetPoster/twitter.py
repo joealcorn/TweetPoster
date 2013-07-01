@@ -24,6 +24,6 @@ class Twitter(User):
         }
 
         r = self.get(url, params=params)
-        assert r.status_code == 200
+        assert r.status_code == 200, r.status_code
 
         return r.json()
