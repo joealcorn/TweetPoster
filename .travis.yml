@@ -1,26 +1,27 @@
 --- 
+language: python
+install: pip install -r requirements.txt
+env: 
+  global: 
+  - secure: |-
+      Mt65+x+Rd6y01J3l5JUiXiYiWocuq2zomgEtwyzW9Jql+X7GVW1YryrJITRC
+      JbvREBFDLKtZjF/6kUJ0B06o8ykAMhaRg/xJdqZ8ZXVMUhr9algwzvHt/JN/
+      D/kJBgQHVvjirvGtbgwT7JUrc8pn8fMEFvaKI4cKtcL1zdknt2E=
+  - secure: |-
+      Aj2rYMFX0pYvRHqS55TgmsNNqdfWY79uSg1s10c5mwcsy8VL01lqAJLZSGuR
+      t2S9Pqq06wxIj4Cq7sD5eRBEg7LFx1OS6vZZhdyR3xxy4alqYxATPO65mrdd
+      30uQhC6mDwnbdzFXkfw1Asfu1iJ/+NQzBtsIZnJFCBqYZ81NnwA=
+  - secure: |-
+      B273fo92tYhMUVevOapBF/G9Gkf9rSJr9GUVJdlC3BemSab8k5jh0cR4MpBA
+      MPeC9NaKX8Z0vUQMGkOmu95M9w+SkbVzBaTKxiOfiotSzUHvP06uomTphzLj
+      9Wj6c0bj1TEt2tWv2TDf0LgvF3DX9wzTTgDsMYs69gDK4lvftAY=
+  - secure: |-
+      oMKlb+ZUWEo3hgB4xFckTRvQc6wO6hsyJh+ks7t4CrWaO+zOZf3/zqFy1KOa
+      gITmMuXISAezmKbmSZkPnfWWxvk6IljlpuKQafnHmvPMIsF6amsEzTp4XEpN
+      FasuQzeFakSkufdJIpZW5VPQHEyy2zIfhYVc4R+PfQvXA07+Axo=
 python: 
 - "2.7"
 script: nosetests -v
+before_script: python run.py
 notifications: 
   email: false
-before_script: python run.py
-language: python
-env: 
-- secure: |-
-    M/Cu0kzVld5K6ZO5MRMdSs25rXgEUXKjiFDdcVGotfY61EXbGNv7KpLju1SZ
-    lfpvCgFhhOp9wEyXcAFilOLH+HmRcxbjLxjDruQI6gvaXDk3OmceNhFG/ptT
-    NcSfU7+BQIB1itrhO9FMxTRaYBp3y3OyUjqT7RqJ2x7yIOqY5Yc=
-- secure: |-
-    SZyrEEJ0chSsZrQIg565TruKwxGA/MBmOZJ+3zsM3WDY0/HjmkXFKuin0DSh
-    qIjaOR81YPX9ThVbaZAc/RRHRz/rsr3g9lvvvp9vG7MV+LkICkEoF1zOOiwS
-    LUZRID/S3ILLLQT6gsH7e/JXXIZlD1hpnEcVDdD9Spgj5/Y1aW8=
-- secure: |-
-    BxNRQlgloxKNQVW3lhzPVkv3k8PnYvlSuYuoJEtglTIMpzlB0g+6ppTIx3qu
-    N/Wy72GqjRleYcYR/yx1wgdWIlfhE5IpHyK8xcVPpfxlPHZ1BboudLOwS/2Z
-    62gi6UFHPZsvxiFGrqp1wbjqGSKzlBf1gcgQzBQnPaTgTNiCgBM=
-- secure: |-
-    MurlM3dkKvqPZvkSWc2OVrybSxyBRRRbZGCfVD5mrVgeBT6HchVgqmF0lbSp
-    o4HIWxInxfNxqsEGuVqJSFltuxDAetNHjHrUqvnCGXjL35LbsHBNu/eIHlCy
-    3uvwB1ZhIRtGscaavZ+pRbqKDLafDph/62p8mC8/uIpOK+jkFlc=
-install: pip install -r requirements.txt
