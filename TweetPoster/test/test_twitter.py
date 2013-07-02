@@ -1,20 +1,12 @@
 from os import path
 
 import httpretty
+from nose.plugins.attrib import attr
 
-from TweetPoster import config
 from TweetPoster.twitter import Twitter
 
 json_dir = path.dirname(path.realpath(__file__)) + '/json/'
 tweet_url = 'https://api.twitter.com/1.1/statuses/show.json'
-config.update({
-    'twitter': {
-        'consumer_key': 'consumer_key',
-        'consumer_secret': 'consumer_secret',
-        'access_token': 'access_token',
-        'access_secret': 'access_secret',
-    }
-})
 
 
 def mock_tweet():
@@ -36,5 +28,17 @@ def test_oauth():
     Twitter().get_tweet('347087814833344512')
     req = httpretty.last_request()
     assert 'Authorization' in req.headers
-    assert 'oauth_token="access_token"' in req.headers['Authorization']
-    assert 'oauth_consumer_key="consumer_key"' in req.headers['Authorization']
+    assert 'oauth_token="' in req.headers['Authorization']
+    assert 'oauth_consumer_key="' in req.headers['Authorization']
+
+
+@attr('network')
+def test_get_tweet():
+    t = Twitter().get_tweet('352056725160988672')
+    assert t.id == 352056725160988672
+    assert isinstance(t.markdown, unicode)
+
+
+@attr('network')
+def test_unicode_tweet():
+    Twitter().get_tweet('351969339991277568')

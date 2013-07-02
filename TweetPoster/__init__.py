@@ -1,7 +1,7 @@
 import json
 import time
 import sqlite3
-from os import path
+from os import path, environ
 
 import requests
 from raven import Client
@@ -10,7 +10,15 @@ from TweetPoster import utils
 from TweetPoster.signals import pre_request
 
 
-config = json.loads(open('config.json').read())
+def load_config():
+    config = json.loads(open('config.json').read())
+    for key in config['twitter'].keys():
+        if environ.get(key):
+            config['twitter'][key] = environ[key]
+
+    return config
+
+config = load_config()
 sentry = Client(config['sentry'].get('dsn', ''))
 template_path = path.dirname(path.realpath(__file__)) + '/templates/'
 
