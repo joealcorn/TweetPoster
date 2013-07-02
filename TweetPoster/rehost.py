@@ -23,10 +23,9 @@ class ImageHost(object):
                     'image': image_url
                 }
             )
-        except requests.exceptions.RequestException:
+            return r.json()['upload']['links']['original']
+        except (ValueError, requests.exceptions.RequestException):
             return None
-
-        return r.json()['upload']['links']['original']
 
 
 class PicTwitterCom(object):
