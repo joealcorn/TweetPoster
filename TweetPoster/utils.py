@@ -80,7 +80,7 @@ def replace_entities(tweet):
 
 def tweet_to_markdown(tweet):
     with open(TweetPoster.template_path + 'tweet.txt') as f:
-        tweet_template = f.read()
+        tweet_template = f.read().decode('utf8')
 
     # Link hashtags, expand urls, rehost images etc
     tweet = replace_entities(tweet)
