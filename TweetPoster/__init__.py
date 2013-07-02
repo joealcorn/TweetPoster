@@ -134,7 +134,6 @@ def main():
             continue
 
         tweet_id = url.group(1)
-        # tweet_id = '351794310498357248'
         try:
             tweet = twitter.get_tweet(tweet_id)
         except AssertionError as e:
@@ -150,7 +149,7 @@ def main():
             continue
 
         except Exception as e:
-            print 'except'
+            print e
             if not isinstance(e, KeyboardInterrupt):
                 sentry.captureException()
             continue

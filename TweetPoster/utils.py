@@ -3,6 +3,7 @@ import re
 from fuzzywuzzy import fuzz
 
 import TweetPoster
+from TweetPoster import rehost
 
 
 def tweet_in_title(tweet, submission):
@@ -36,6 +37,7 @@ def replace_entities(tweet):
     Rehosts images, expands urls and links
     hashtags and @mentions
     """
+    urls = []
 
     # Link hashtags
     for tag in tweet.entities['hashtags']:
@@ -54,6 +56,24 @@ def replace_entities(tweet):
             url=url['expanded_url']
         )
         tweet.text = tweet.text.replace(url['url'], replacement)
+        urls.append(url['expanded_url'])
+
+    # Rehost pic.twitter.com images
+    if 'media' in tweet.entities:
+        # Photos using Twitter's own image sharing
+        # will be in here. We need to match an re
+        # against urls to grab the rest of them
+        for media in tweet.entities['media']:
+            if media['type'] != 'photo':
+                continue
+
+            imgur = rehost.PicTwitterCom.extract(media['media_url'])
+            if not imgur:
+                continue
+
+            replacement = u'[*pic.twitter.com*]({url}) [^[Imgur]]({imgur})'
+            replacement = replacement.format(url=media['media_url'], imgur=imgur)
+            tweet.text = tweet.text.replace(media['url'], replacement)
 
     return tweet
 

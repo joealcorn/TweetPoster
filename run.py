@@ -19,6 +19,9 @@ default_conf = {
         'access_token': '',
         'access_secret': '',
     },
+    'imgur': {
+        'key': '',
+    },
 }
 
 
