@@ -99,20 +99,6 @@ class User(object):
 
 
 def run():
-    while True:
-        try:
-            main()
-        except KeyboardInterrupt:
-            import sys
-            sys.exit(0)
-        except:
-            sentry.captureException()
-        finally:
-            print 'sleeping'
-            time.sleep(90)
-
-
-def main():
     from TweetPoster.reddit import Redditor
     from TweetPoster.twitter import Twitter
 
@@ -124,6 +110,20 @@ def main():
         config['reddit']['password']
     )
 
+    while True:
+        try:
+            main(db, reddit, twitter)
+        except KeyboardInterrupt:
+            import sys
+            sys.exit(0)
+        except:
+            sentry.captureException()
+        finally:
+            print 'sleeping'
+            time.sleep(90)
+
+
+def main(db, reddit, twitter):
     posts = reddit.get_new_posts(db)
     for post in posts:
         url = twitter.tweet_re.match(post.url)
