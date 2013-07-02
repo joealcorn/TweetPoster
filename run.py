@@ -2,8 +2,6 @@ import os
 import json
 import sys
 
-import TweetPoster
-
 default_conf = {
     'database': 'tp.db',
     'sentry': {
@@ -44,4 +42,5 @@ if __name__ == '__main__':
         write_conf(default_conf)
 
     else:
+        import TweetPoster
         TweetPoster.run()
