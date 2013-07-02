@@ -30,6 +30,7 @@ class Redditor(User):
             'api_type': 'json',
         }
 
+        print 'Logging in...'
         r = self.post(login_url, params)
         if 'data' not in r.json()['json']:
             raise Exception('login failed')
@@ -52,6 +53,7 @@ class Redditor(User):
             'api_type': 'json',
         }
 
+        print 'Commenting on ' + thing_id
         return self.post(url, params)
 
     def get_new_posts(self, db=db):
@@ -59,6 +61,7 @@ class Redditor(User):
         Returns a list of posts that haven't already
         been processed
         """
+        print 'Fetching new posts...'
         url = 'http://www.reddit.com/domain/twitter.com/new.json'
         r = self.get(url, params=dict(limit=100))
         all_posts = r.json()['data']['children']
