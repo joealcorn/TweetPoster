@@ -3,7 +3,7 @@ from datetime import datetime
 
 from requests_oauthlib import OAuth1
 
-from TweetPoster import User, config, utils
+from TweetPoster import User, config, utils, sentry
 
 
 class Twitter(User):
@@ -42,11 +42,17 @@ class Tweet(object):
         self.user = TwitterUser(json['user'])
         self.text = json['text']
         self.id = json['id']
-        self.in_reply_to = json['in_reply_to_status_id_str']
+        self.reply_to = None
         self.entities = json['entities']
         self.link = 'https://twitter.com/{0}/status/{1}'.format(self.user.name, self.id)
         self.datetime = datetime.strptime(json['created_at'], '%a %b %d %H:%M:%S +0000 %Y')
         self.markdown = utils.tweet_to_markdown(self)
+
+        if json['in_reply_to_status_id'] is not None:
+            try:
+                self.reply_to = Twitter().get_tweet(json['in_reply_to_status_id_str'])
+            except:
+                sentry.captureException()
 
 
 class TwitterUser(object):

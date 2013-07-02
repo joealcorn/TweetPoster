@@ -163,6 +163,16 @@ def main():
         with open(template_path + 'footer.txt') as f:
             footer_markdown = f.read().format(**post.__dict__)
 
-        full_comment = tweet.markdown + footer_markdown
+        tweets = []
+        while True:
+            tweets.append(tweet.markdown)
+            if tweet.reply_to is None:
+                break
+            else:
+                tweet = tweet.reply_to
+
+        tweets_markdown = '\n'.join(tweets)
+
+        full_comment = tweets_markdown + footer_markdown
         reddit.comment(post.fullname, full_comment)
         post.mark_as_processed()
