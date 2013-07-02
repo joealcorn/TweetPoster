@@ -2,6 +2,8 @@ import re
 
 from fuzzywuzzy import fuzz
 
+import TweetPoster
+
 
 def tweet_in_title(tweet, submission):
     similarity = fuzz.ratio(tweet.text, submission.title)
@@ -54,3 +56,15 @@ def replace_entities(tweet):
         tweet.text = tweet.text.replace(url['url'], replacement)
 
     return tweet
+
+
+def tweet_to_markdown(tweet):
+    with open(TweetPoster.template_path + 'tweet.txt') as f:
+        tweet_template = f.read()
+
+    # Link hashtags, expand urls, rehost images etc
+    tweet = replace_entities(tweet)
+
+    # This prevents newlines breaking out of a markdown quote
+    tweet.text = '\n>'.join(tweet.text.splitlines())
+    return tweet_template.format(**tweet.__dict__)

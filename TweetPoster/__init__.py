@@ -12,6 +12,7 @@ from TweetPoster.signals import pre_request
 
 config = json.loads(open('config.json').read())
 sentry = Client(config['sentry'].get('dsn', ''))
+template_path = path.dirname(path.realpath(__file__)) + '/templates/'
 
 
 class Database(object):
@@ -159,21 +160,9 @@ def main():
             post.mark_as_processed()
             continue
 
-        template_path = path.dirname(path.realpath(__file__)) + '/templates/'
-        with open(template_path + 'tweet.txt') as f:
-            tweet_template = f.read()
-
-        # Link hashtags, expand urls, rehost images etc
-        tweet = utils.replace_entities(tweet)
-
-        # This prevents newlines breaking out of a markdown quote
-        tweet.text = '\n>'.join(tweet.text.splitlines())
-        tweet_markdown = tweet_template.format(**tweet.__dict__)
-
         with open(template_path + 'footer.txt') as f:
             footer_markdown = f.read().format(**post.__dict__)
 
-        full_comment = tweet_markdown + footer_markdown
-
+        full_comment = tweet.markdown + footer_markdown
         reddit.comment(post.fullname, full_comment)
         post.mark_as_processed()

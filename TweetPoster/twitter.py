@@ -3,7 +3,7 @@ from datetime import datetime
 
 from requests_oauthlib import OAuth1
 
-from TweetPoster import User, config
+from TweetPoster import User, config, utils
 
 
 class Twitter(User):
@@ -45,8 +45,8 @@ class Tweet(object):
         self.in_reply_to = json['in_reply_to_status_id_str']
         self.entities = json['entities']
         self.link = 'https://twitter.com/{0}/status/{1}'.format(self.user.name, self.id)
-
         self.datetime = datetime.strptime(json['created_at'], '%a %b %d %H:%M:%S +0000 %Y')
+        self.markdown = utils.tweet_to_markdown(self)
 
 
 class TwitterUser(object):
