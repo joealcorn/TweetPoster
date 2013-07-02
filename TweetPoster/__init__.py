@@ -116,6 +116,11 @@ def run():
         except KeyboardInterrupt:
             import sys
             sys.exit(0)
+        except requests.exceptions.Timeout:
+            # These are exceptions we don't
+            # want to tell sentry about
+            pass
+
         except:
             sentry.captureException()
         finally:
