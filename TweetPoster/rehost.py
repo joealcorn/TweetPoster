@@ -50,5 +50,8 @@ class Instagram(ImageHost):
             return None
 
         soup = BeautifulSoup(r.content)
-        photo = soup.find("img", class_="photo")['src']
-        return self.rehost(photo)
+        photo = soup.find("img", class_="photo")
+        if not photo:
+            return None
+
+        return self.rehost(photo['src'])
