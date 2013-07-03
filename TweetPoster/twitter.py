@@ -51,6 +51,8 @@ class Tweet(object):
         if json['in_reply_to_status_id'] is not None:
             try:
                 self.reply_to = Twitter().get_tweet(json['in_reply_to_status_id_str'])
+            except AssertionError:
+                pass
             except:
                 sentry.captureException()
 
