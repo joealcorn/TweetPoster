@@ -51,7 +51,6 @@ def replace_entities(tweet):
     Rehosts images, expands urls and links
     hashtags and @mentions
     """
-    urls = []
 
     # Link hashtags
     for tag in tweet.entities['hashtags']:
@@ -63,14 +62,23 @@ def replace_entities(tweet):
         replacement = u'[@{name}](https://twitter.com/{name})'.format(name=mention['screen_name'])
         tweet.text = re.sub('(?i)\@{0}'.format(mention['screen_name']), replacement, tweet.text)
 
-    # Replace t.co with actual urls
+    # Replace t.co with actual urls and rehost other images
     for url in tweet.entities['urls']:
         replacement = u'[*{canonical}*]({url})'.format(
             canonical=canonical_url(url['expanded_url']),
             url=url['expanded_url']
         )
+
+        # Check if this link is to an image we can rehost
+        for host in rehost.ImageHost.__subclasses__():
+            if re.match(host.url_re, url['expanded_url']):
+                imgur = host().extract(url['expanded_url'])
+                if imgur:
+                    replacement = replacement + ' [^[Imgur]]({0})'.format(
+                        imgur
+                    )
+
         tweet.text = tweet.text.replace(url['url'], replacement)
-        urls.append(url['expanded_url'])
 
     # Rehost pic.twitter.com images
     if 'media' in tweet.entities:

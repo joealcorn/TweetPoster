@@ -6,3 +6,4 @@ httpretty==0.6.2
 nose==1.3.0
 raven==3.3.12
 fuzzywuzzy==0.2
+beautifulsoup4==4.2.1

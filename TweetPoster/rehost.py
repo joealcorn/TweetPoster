@@ -1,4 +1,5 @@
 import requests
+from bs4 import BeautifulSoup
 
 import TweetPoster
 
@@ -36,3 +37,18 @@ class PicTwitterCom(object):
             url = url + ':large'
 
         return ImageHost.rehost(url)
+
+
+class Instagram(ImageHost):
+
+    url_re = 'https?://instagram.com/p/\w+/'
+
+    def extract(self, url):
+        try:
+            r = requests.get(url)
+        except requests.exceptions.RequestException:
+            return None
+
+        soup = BeautifulSoup(r.content)
+        photo = soup.find("img", class_="photo")['src']
+        return self.rehost(photo)
