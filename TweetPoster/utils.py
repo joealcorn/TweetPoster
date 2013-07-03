@@ -62,6 +62,23 @@ def replace_entities(tweet):
         replacement = u'[@{name}](https://twitter.com/{name})'.format(name=mention['screen_name'])
         tweet.text = re.sub('(?i)\@{0}'.format(mention['screen_name']), replacement, tweet.text)
 
+    # Rehost pic.twitter.com images
+    if 'media' in tweet.entities:
+        # Photos using Twitter's own image sharing
+        # will be in here. We need to match an re
+        # against urls to grab the rest of them
+        for media in tweet.entities['media']:
+            if media['type'] != 'photo':
+                continue
+
+            imgur = rehost.PicTwitterCom.extract(media['media_url'])
+            if not imgur:
+                continue
+
+            replacement = u'[*pic.twitter.com*]({url}) [^[Imgur]]({imgur})'
+            replacement = replacement.format(url=media['media_url'], imgur=imgur)
+            tweet.text = tweet.text.replace(media['url'], replacement)
+
     # Replace t.co with actual urls and rehost other images
     for url in tweet.entities['urls']:
         replacement = u'[*{canonical}*]({url})'.format(
@@ -79,23 +96,6 @@ def replace_entities(tweet):
                     )
 
         tweet.text = tweet.text.replace(url['url'], replacement)
-
-    # Rehost pic.twitter.com images
-    if 'media' in tweet.entities:
-        # Photos using Twitter's own image sharing
-        # will be in here. We need to match an re
-        # against urls to grab the rest of them
-        for media in tweet.entities['media']:
-            if media['type'] != 'photo':
-                continue
-
-            imgur = rehost.PicTwitterCom.extract(media['media_url'])
-            if not imgur:
-                continue
-
-            replacement = u'[*pic.twitter.com*]({url}) [^[Imgur]]({imgur})'
-            replacement = replacement.format(url=media['media_url'], imgur=imgur)
-            tweet.text = tweet.text.replace(media['url'], replacement)
 
     return tweet
 
