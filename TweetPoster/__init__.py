@@ -121,22 +121,22 @@ def main():
     )
 
     while True:
-        posts = reddit.get_new_posts(db)
-        for post in posts:
-            try:
+        try:
+            posts = reddit.get_new_posts(db)
+            for post in posts:
                 handle_submission(post, twitter, reddit)
-            except KeyboardInterrupt:
-                import sys
-                sys.exit(0)
-            except requests.exceptions.Timeout:
-                # These are exceptions we don't
-                # want to tell sentry about
-                pass
-            except:
-                sentry.captureException()
-            finally:
-                print 'sleeping'
-                time.sleep(90)
+        except KeyboardInterrupt:
+            import sys
+            sys.exit(0)
+        except requests.exceptions.Timeout:
+            # These are exceptions we don't
+            # want to tell sentry about
+            pass
+        except:
+            sentry.captureException()
+        finally:
+            print 'sleeping'
+            time.sleep(90)
 
 
 def handle_submission(post, twitter, reddit):
