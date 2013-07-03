@@ -5,6 +5,20 @@ from fuzzywuzzy import fuzz
 import TweetPoster
 from TweetPoster import rehost
 
+from raven.processors import SanitizePasswordsProcessor
+
+
+class SanitizeCredentialsProcessor(SanitizePasswordsProcessor):
+    FIELDS = frozenset([
+        'authorization',
+        'password',
+        'secret',
+        'passwd',
+        'token',
+        'key',
+        'dsn',
+    ])
+
 
 def tweet_in_title(tweet, submission):
     similarity = fuzz.ratio(tweet.text, submission.title)

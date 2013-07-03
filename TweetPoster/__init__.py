@@ -19,7 +19,9 @@ def load_config():
     return config
 
 config = load_config()
-sentry = Client(config['sentry'].get('dsn', ''))
+sentry = Client(config['sentry'].get('dsn', ''), processors=(
+    'TweetPoster.utils.SanitizeCredentialsProcessor',
+))
 template_path = path.dirname(path.realpath(__file__)) + '/templates/'
 
 
