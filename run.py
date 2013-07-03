@@ -43,4 +43,4 @@ if __name__ == '__main__':
 
     else:
         import TweetPoster
-        TweetPoster.run()
+        TweetPoster.main()

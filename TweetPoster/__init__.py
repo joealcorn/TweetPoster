@@ -108,7 +108,7 @@ class User(object):
             return self.session.get(url, **kw)
 
 
-def run():
+def main():
     from TweetPoster.reddit import Redditor
     from TweetPoster.twitter import Twitter
 
@@ -121,72 +121,64 @@ def run():
     )
 
     while True:
-        try:
-            main(db, reddit, twitter)
-        except KeyboardInterrupt:
-            import sys
-            sys.exit(0)
-        except requests.exceptions.Timeout:
-            # These are exceptions we don't
-            # want to tell sentry about
-            pass
-
-        except:
-            sentry.captureException()
-        finally:
-            print 'sleeping'
-            time.sleep(90)
-
-
-def main(db, reddit, twitter):
-    posts = reddit.get_new_posts(db)
-    for post in posts:
-        url = twitter.tweet_re.match(post.url)
-        if not url:
-            # This post links to the twitter domain
-            # but not to a tweet or picture
-            post.mark_as_processed()
-            continue
-
-        tweet_id = url.group(1)
-        try:
-            tweet = twitter.get_tweet(tweet_id)
-        except AssertionError as e:
-            code = e.args[0]
-            if code == 429:
-                # We've hit Twitter's ratelimit
-                print 'Ratelimited by Twitter, sleeping for 15 minutes'
-                time.sleep(60 * 15)
-
-            elif code == 404:
-                post.mark_as_processed()
-
-            continue
-
-        except Exception as e:
-            print e
-            if not isinstance(e, KeyboardInterrupt):
+        posts = reddit.get_new_posts(db)
+        for post in posts:
+            try:
+                handle_submission(post, twitter, reddit)
+            except KeyboardInterrupt:
+                import sys
+                sys.exit(0)
+            except requests.exceptions.Timeout:
+                # These are exceptions we don't
+                # want to tell sentry about
+                pass
+            except:
                 sentry.captureException()
-            continue
+            finally:
+                print 'sleeping'
+                time.sleep(90)
 
-        if utils.tweet_in_title(tweet, post):
-            print 'Tweet in title, skipping'
-            post.mark_as_processed()
-            continue
 
-        with open(template_path + 'footer.txt') as f:
-            footer_markdown = f.read().format(**post.__dict__)
-
-        tweets = []
-        while True:
-            tweets.append(tweet.markdown)
-            if tweet.reply_to is None:
-                break
-            else:
-                tweet = tweet.reply_to
-
-        tweets_markdown = '\n'.join(tweets)
-
-        full_comment = tweets_markdown + footer_markdown
-        reddit.comment(post.fullname, full_comment)
+def handle_submission(post, twitter, reddit):
+    url = twitter.tweet_re.match(post.url)
+    if not url:
+        # This post links to the twitter domain
+        # but not to a tweet or picture
         post.mark_as_processed()
+        return
+
+    tweet_id = url.group(1)
+    try:
+        tweet = twitter.get_tweet(tweet_id)
+    except AssertionError as e:
+        code = e.args[0]
+        if code == 429:
+            # We've hit Twitter's ratelimit
+            print 'Ratelimited by Twitter, sleeping for 15 minutes'
+            time.sleep(60 * 15)
+
+        elif code == 404:
+            post.mark_as_processed()
+        return
+
+    if utils.tweet_in_title(tweet, post):
+        print 'Tweet in title, skipping'
+        post.mark_as_processed()
+        return
+
+    with open(template_path + 'footer.txt') as f:
+        footer_markdown = f.read().format(**post.__dict__)
+
+    tweets = []
+    while True:
+        tweets.append(tweet.markdown)
+        if tweet.reply_to is None:
+            break
+        else:
+            tweet = tweet.reply_to
+
+    tweets_markdown = '\n'.join(tweets)
+
+    full_comment = tweets_markdown + footer_markdown
+    reddit.comment(post.fullname, full_comment)
+    post.mark_as_processed()
