@@ -177,7 +177,7 @@ def handle_submission(post, twitter, reddit):
         else:
             tweet = tweet.reply_to
 
-    tweets_markdown = '\n'.join(tweets)
+    tweets_markdown = '\n'.join(reversed(tweets))
 
     full_comment = tweets_markdown + footer_markdown
     reddit.comment(post.fullname, full_comment)
