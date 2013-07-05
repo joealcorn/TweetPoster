@@ -1,5 +1,7 @@
 import time
 
+from requests.exceptions import RequestException
+
 from TweetPoster import User, Database
 from TweetPoster.signals import pre_request
 
@@ -63,8 +65,13 @@ class Redditor(User):
         """
         print 'Fetching new posts...'
         url = 'http://www.reddit.com/domain/twitter.com/new.json'
-        r = self.get(url, params=dict(limit=100))
-        all_posts = r.json()['data']['children']
+
+        try:
+            r = self.get(url, params=dict(limit=100))
+            all_posts = r.json()['data']['children']
+        except (RequestException, ValueError):
+            return []
+
         posts = [
             Submission(p) for p in all_posts
             if not db.has_processed(p['data']['name'])
