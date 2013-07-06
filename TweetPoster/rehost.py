@@ -55,3 +55,20 @@ class Instagram(ImageHost):
             return None
 
         return self.rehost(photo['src'])
+
+
+class YFrog(ImageHost):
+
+    url_re = 'https?://yfrog.com/\w+'
+
+    def extract(self, url):
+        url = url.replace('://', '://twitter.')
+        try:
+            r = requests.get(url, params={'sa': 0})
+        except requests.exceptions.RequestException:
+            return None
+
+        soup = BeautifulSoup(r.content)
+        photo = soup.find(id='input-direct')['value']
+
+        return self.rehost(photo)
