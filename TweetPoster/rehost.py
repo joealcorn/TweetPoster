@@ -72,3 +72,20 @@ class YFrog(ImageHost):
         photo = soup.find(id='input-direct')['value']
 
         return self.rehost(photo)
+
+
+class Twitpic(ImageHost):
+
+    url_re = 'https?://twitpic.com/\w+'
+
+    def extract(self, url):
+        url = url + '/full'
+        print url
+        try:
+            r = requests.get(url)
+            soup = BeautifulSoup(r.content)
+        except:
+            return None
+
+        img = soup.find(id='media-full').find('img')
+        return self.rehost(img['src'])
