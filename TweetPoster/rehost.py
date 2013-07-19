@@ -80,7 +80,7 @@ class Twitpic(ImageHost):
 
     def extract(self, url):
         url = url + '/full'
-        print url
+
         try:
             r = requests.get(url)
             soup = BeautifulSoup(r.content)
