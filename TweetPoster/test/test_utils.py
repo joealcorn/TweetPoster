@@ -1,3 +1,6 @@
+import httpretty
+
+from TweetPoster.test import test_twitter
 from TweetPoster.utils import (
     canonical_url,
     replace_entities,
@@ -31,6 +34,21 @@ class FakeTweet(object):
                     })
 
 
+def mock_redirect():
+    httpretty.register_uri(
+        httpretty.HEAD,
+        'https://github.com/buttscicles/TweetPoster',
+        location='http://yl.io',
+        status=301,
+    )
+
+    httpretty.register_uri(
+        httpretty.HEAD,
+        'http://yl.io',
+    )
+
+
+@httpretty.activate
 def test_replace_entities():
     t = replace_entities(FakeTweet(text='#hashtag'))
     assert t.text == '[#hashtag](https://twitter.com/search?q=%23hashtag)'
@@ -41,6 +59,10 @@ def test_replace_entities():
 
     t = replace_entities(FakeTweet(text='https://t.co/1'))
     assert t.text == '[*github.com*](https://github.com/buttscicles/TweetPoster)'
+
+    mock_redirect()
+    t = replace_entities(FakeTweet(text='http'))
+    assert t.text == '[*yl.io*](http://yl.io)'
 
 
 def test_canonical():

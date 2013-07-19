@@ -1,6 +1,9 @@
 import re
+import sys
+import traceback
 
 from fuzzywuzzy import fuzz
+import requests
 
 import TweetPoster
 from TweetPoster import rehost
@@ -79,8 +82,23 @@ def replace_entities(tweet):
             replacement = replacement.format(url=media['media_url'], imgur=imgur)
             tweet.text = tweet.text.replace(media['url'], replacement)
 
-    # Replace t.co with actual urls and rehost other images
+    # Replace t.co with actual urls, unshorten any
+    # other urls shorteners and rehost other images
     for url in tweet.entities['urls']:
+        # check for redirects
+        try:
+            # requests will follow any redirects
+            # and allow us to check for them
+            r = requests.head(url['expanded_url'], allow_redirects=True)
+        except requests.exceptions.RequestException:
+            sys.stderr.write('Exception when checking url: {0}\n'.format(
+                url['expanded_url']
+            ))
+            traceback.print_exc()
+        else:
+            if r.history != []:
+                url['expanded_url'] = r.url
+
         replacement = u'[*{canonical}*]({url})'.format(
             canonical=canonical_url(url['expanded_url']),
             url=url['expanded_url']
