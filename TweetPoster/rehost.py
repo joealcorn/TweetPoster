@@ -1,3 +1,6 @@
+import re
+import json
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -49,12 +52,9 @@ class Instagram(ImageHost):
         except requests.exceptions.RequestException:
             return None
 
-        soup = BeautifulSoup(r.content)
-        photo = soup.find("img", class_="photo")
-        if not photo:
-            return None
-
-        return self.rehost(photo['src'])
+        j = re.search('("display_src":".*")', r.content)
+        j = json.loads('{' + j.group(1) + '}')
+        return self.rehost(j['display_src'])
 
 
 class YFrog(ImageHost):
