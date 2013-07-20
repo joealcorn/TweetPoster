@@ -1,4 +1,4 @@
-TweetPoster
+TweetPoster [![Build Status](https://travis-ci.org/buttscicles/TweetPoster.png?branch=master)](https://travis-ci.org/buttscicles/TweetPoster)
 ======
 
 TweetPoster is a reddit bot that posts the contents of the submitted tweet (and any parents)
