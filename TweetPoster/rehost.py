@@ -44,7 +44,7 @@ class PicTwitterCom(object):
 
 class Instagram(ImageHost):
 
-    url_re = 'https?://instagram.com/p/\w+/'
+    url_re = 'https?://instagram.com/p/[\w_-]+/'
 
     def extract(self, url):
         try:
