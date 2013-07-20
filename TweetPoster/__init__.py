@@ -171,13 +171,13 @@ def handle_submission(post, twitter, reddit):
 
     tweets = []
     while True:
-        tweets.append(tweet.markdown)
+        tweets.insert(0, tweet.markdown)
         if tweet.reply_to is None:
             break
         else:
             tweet = tweet.reply_to
 
-    tweets_markdown = '\n'.join(reversed(tweets))
+    tweets_markdown = '\n'.join(tweets)
 
     full_comment = tweets_markdown + footer_markdown
     reddit.comment(post.fullname, full_comment)
