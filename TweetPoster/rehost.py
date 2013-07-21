@@ -52,9 +52,10 @@ class Instagram(ImageHost):
         except requests.exceptions.RequestException:
             return None
 
-        j = re.search('("display_src":".*")', r.content)
-        j = json.loads('{' + j.group(1) + '}')
-        return self.rehost(j['display_src'])
+        j = re.search('("display_src":".*?")', r.content)
+        if j:
+            j = json.loads('{' + j.group(1) + '}')
+            return self.rehost(j['display_src'])
 
 
 class YFrog(ImageHost):
