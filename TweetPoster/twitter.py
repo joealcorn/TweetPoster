@@ -56,9 +56,15 @@ class Tweet(object):
             except:
                 sentry.captureException()
 
+    def __repr__(self):
+        return '<TweetPoster.twitter.Tweet ({0})>'.format(self.id)
+
 
 class TwitterUser(object):
 
     def __init__(self, json):
         self.name = json['screen_name']
         self.link = 'https://twitter.com/' + self.name
+
+    def __repr__(self):
+        return '<TweetPoster.twitter.TwitterUser ({0})>'.format(self.name)
