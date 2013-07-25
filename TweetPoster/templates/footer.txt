@@ -6,4 +6,3 @@
 [^[FAQ]](http://www.reddit.com/r/TweetPoster/comments/13relk/)
 [^[Code]](https://github.com/buttscicles/TweetPoster)
 [^[Issues]](https://github.com/buttscicles/TweetPoster/issues)
-^\(times ^are ^utc)

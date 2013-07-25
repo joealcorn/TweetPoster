@@ -1,4 +1,4 @@
 [**@{user.name}**]({user.link}):
->[{datetime}]({link})
+>[{datetime} UTC]({link})
 
 >{text}
