@@ -1,4 +1,5 @@
 import time
+from socket import timeout
 
 from requests.exceptions import RequestException
 
@@ -70,7 +71,7 @@ class Redditor(User):
             r = self.get(url, params=dict(limit=100))
             assert r.status_code == 200
             all_posts = r.json()['data']['children']
-        except (RequestException, ValueError, AssertionError):
+        except (RequestException, ValueError, AssertionError, timeout):
             return []
 
         posts = [
