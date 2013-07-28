@@ -68,8 +68,9 @@ class Redditor(User):
 
         try:
             r = self.get(url, params=dict(limit=100))
+            assert r.status_code == 200
             all_posts = r.json()['data']['children']
-        except (RequestException, ValueError):
+        except (RequestException, ValueError, AssertionError):
             return []
 
         posts = [
