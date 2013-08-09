@@ -90,3 +90,11 @@ class Twitpic(ImageHost):
 
         img = soup.find(id='media-full').find('img')
         return self.rehost(img['src'])
+
+
+class Puush(ImageHost):
+
+    url_re = 'https?://puu.sh/[\w0-9]+'
+
+    def extract(self, url):
+        return self.rehost(url)
