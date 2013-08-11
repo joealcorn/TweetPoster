@@ -76,10 +76,12 @@ def replace_entities(tweet):
 
             imgur = rehost.PicTwitterCom.extract(media['media_url'])
             if not imgur:
-                continue
+                # We still want to unshorten the t.co link
+                replacement = '[*pic.twitter.com*]({0})'.format(media['url'])
+            else:
+                replacement = u'[*pic.twitter.com*]({url}) [^[Imgur]]({imgur})'
+                replacement = replacement.format(url=media['media_url'], imgur=imgur)
 
-            replacement = u'[*pic.twitter.com*]({url}) [^[Imgur]]({imgur})'
-            replacement = replacement.format(url=media['media_url'], imgur=imgur)
             tweet.text = tweet.text.replace(media['url'], replacement)
 
     # Replace t.co with actual urls, unshorten any
