@@ -27,6 +27,10 @@ class ImageHost(object):
                     'image': image_url
                 }
             )
+            if not r.status_code == 200:
+                print r.json()['error']['message']
+                return None
+
             return r.json()['upload']['links']['original']
         except (ValueError, requests.exceptions.RequestException):
             return None
