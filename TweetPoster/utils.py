@@ -122,7 +122,7 @@ def replace_entities(tweet):
 def sanitize_markdown(unescaped):
     # This prevents newlines breaking out of a markdown quote
     # and also escapes markdown's special characters
-    return re.sub(r'([\\`*_{}[\]()#+-.!])', r'\\\\1',
+    return re.sub(r'([\\`*_{}[\]()#+-.!])', r'\\\1',
                   '\n>'.join(unescaped.splitlines()))
 
 
