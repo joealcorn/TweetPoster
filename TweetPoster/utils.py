@@ -130,9 +130,10 @@ def tweet_to_markdown(tweet):
     with open(TweetPoster.template_path + 'tweet.txt') as f:
         tweet_template = f.read().decode('utf8')
 
+    # Sanitize markdown before processing twitter entities
+    tweet.text = sanitize_markdown(tweet.text)
+
     # Link hashtags, expand urls, rehost images etc
     tweet = replace_entities(tweet)
-
-    tweet.text = sanitize_markdown(tweet.text)
 
     return tweet_template.format(**tweet.__dict__)
