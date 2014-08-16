@@ -102,3 +102,18 @@ class Puush(ImageHost):
 
     def extract(self, url):
         return self.rehost(url)
+
+
+class Facebook(ImageHost):
+
+    url_re = 'https?://facebook.com/photo.php\?fbid=[0-9]+$'
+
+    def extract(self, url):
+        try:
+            r = requests.get(url)
+        except requests.exceptions.RequestException:
+            return None
+
+        soup = BeautifulSoup(r.content)
+        img = soup.find(id='fbPhotoImage')
+        return self.rehost(img['src'])
