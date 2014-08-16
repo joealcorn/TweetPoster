@@ -58,7 +58,8 @@ def replace_entities(tweet):
     # Link hashtags
     for tag in tweet.entities['hashtags']:
         replacement = u'[#{tag}](https://twitter.com/search?q=%23{tag})'.format(tag=tag['text'])
-        tweet.text = tweet.text.replace('#' + tag['text'], replacement)
+        source = sanitize_markdown('#' + tag['text'])
+        tweet.text = tweet.text.replace(source, replacement)
 
     # Link mentions
     for mention in tweet.entities['user_mentions']:
@@ -82,7 +83,8 @@ def replace_entities(tweet):
                 replacement = u'[*pic.twitter.com*]({url}) [^[Imgur]]({imgur})'
                 replacement = replacement.format(url=media['media_url'], imgur=imgur)
 
-            tweet.text = tweet.text.replace(media['url'], replacement)
+            source = sanitize_markdown(media['url'])
+            tweet.text = tweet.text.replace(source, replacement)
 
     # Replace t.co with actual urls, unshorten any
     # other urls shorteners and rehost other images
@@ -115,7 +117,8 @@ def replace_entities(tweet):
                         imgur
                     )
 
-        tweet.text = tweet.text.replace(url['url'], replacement)
+        source = sanitize_markdown(url['url'])
+        tweet.text = tweet.text.replace(source, replacement)
 
     return tweet
 
