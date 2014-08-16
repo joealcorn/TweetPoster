@@ -3,6 +3,7 @@ import httpretty
 from TweetPoster.utils import (
     canonical_url,
     replace_entities,
+    sanitize_markdown,
 )
 
 
@@ -83,3 +84,18 @@ def test_canonical():
 
     u = canonical_url('http://example.com')
     assert u == 'example.com'
+
+
+def test_sanitize_markdown():
+    s = sanitize_markdown('[link](http://believe.in)')
+    assert s == '\[link\]\(http://believe\.in\)'
+
+    s = sanitize_markdown('>some quote')
+    assert s == '\>some quote'
+
+    s = sanitize_markdown('*bold*')
+    assert s == '\*bold\*'
+
+    s = sanitize_markdown('_bold_')
+    assert s == '\_bold\_'
+
