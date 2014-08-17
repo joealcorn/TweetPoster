@@ -21,12 +21,16 @@ class FakeTweet(object):
             setattr(self, key, val)
 
         if 'text' in kw:
-            for word in kw['text'].split(' '):
-                if word[0] == '#':
-                    self.entities['hashtags'].append(dict(text=word[1:]))
+            self.text = sanitize_markdown(kw['text'])
 
-                elif word[0] == '@':
-                    self.entities['user_mentions'].append(dict(screen_name=word[1:]))
+            for word in kw['text'].split(' '):
+                if word.startswith(('#', '\#')):
+                    tag = word.split('#', 1)[-1]
+                    self.entities['hashtags'].append({'text': tag})
+
+                elif word.startswith(('@', '\@')):
+                    name = word.split('@', 1)[-1]
+                    self.entities['user_mentions'].append({'screen_name': name})
 
                 elif word.startswith('http'):
                     self.entities['urls'].append({
@@ -55,7 +59,6 @@ def test_replace_entities():
     assert t.text == '[#hashtag](https://twitter.com/search?q=%23hashtag)'
 
     t = replace_entities(FakeTweet(text='@username'))
-    print t.text
     assert t.text == '[@username](https://twitter.com/username)'
 
     httpretty.register_uri(
@@ -91,7 +94,7 @@ def test_sanitize_markdown():
     assert s == '\[link\]\(http://believe\.in\)'
 
     s = sanitize_markdown('>some quote')
-    assert s == '\>some quote'
+    assert s == '>some quote'
 
     s = sanitize_markdown('*bold*')
     assert s == '\*bold\*'

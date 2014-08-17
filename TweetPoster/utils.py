@@ -122,6 +122,7 @@ def replace_entities(tweet):
 
     return tweet
 
+
 def sanitize_markdown(unescaped):
     # This prevents newlines breaking out of a markdown quote
     # and also escapes markdown's special characters
