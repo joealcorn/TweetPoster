@@ -91,7 +91,7 @@ def test_canonical():
 
 def test_sanitize_markdown():
     s = sanitize_markdown('[link](http://believe.in)')
-    assert s == '\[link\]\(http://believe\.in\)'
+    assert s == '\[link\]\(http://believe.in\)'
 
     s = sanitize_markdown('>some quote')
     assert s == '>some quote'
@@ -101,4 +101,7 @@ def test_sanitize_markdown():
 
     s = sanitize_markdown('_bold_')
     assert s == '\_bold\_'
+
+    s = sanitize_markdown('first, second and third')
+    assert s == 'first, second and third'
 
