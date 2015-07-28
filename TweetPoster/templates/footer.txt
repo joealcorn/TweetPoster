@@ -1,8 +1,8 @@
 
 ----
 
-[^[Mistake?]](http://www.reddit.com/message/compose/?to=TweetPoster&subject=Error%20Report&message=http://reddit.com/{id}%0A%0APlease leave above link unaltered.)
-[^[Suggestion]](http://www.reddit.com/message/compose/?to=TweetPoster&subject=Suggestion)
-[^[FAQ]](http://www.reddit.com/r/TweetPoster/comments/13relk/)
+[^[Mistake?]](/compose/?to=TweetPoster&subject=Error%20Report&message=/{id}%0A%0APlease leave above link unaltered.)
+[^[Suggestion]](/message/compose/?to=TweetPoster&subject=Suggestion)
+[^[FAQ]](/r/TweetPoster/comments/13relk/)
 [^[Code]](https://github.com/buttscicles/TweetPoster)
 [^[Issues]](https://github.com/buttscicles/TweetPoster/issues)
