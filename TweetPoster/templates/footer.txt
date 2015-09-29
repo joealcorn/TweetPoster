@@ -1,7 +1,7 @@
 
 ----
 
-[^[Mistake?]](/compose/?to=TweetPoster&subject=Error%20Report&message=/{id}%0A%0APlease leave above link unaltered.)
+[^[Mistake?]](/message/compose/?to=TweetPoster&subject=Error%20Report&message=/{id}%0A%0APlease leave above link unaltered.)
 [^[Suggestion]](/message/compose/?to=TweetPoster&subject=Suggestion)
 [^[FAQ]](/r/TweetPoster/comments/13relk/)
 [^[Code]](https://github.com/buttscicles/TweetPoster)
